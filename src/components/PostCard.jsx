@@ -10,11 +10,12 @@ const PostCard = ({ post }) => {
   const [likesCount, setLikesCount] = useState(Math.floor(Math.random() * 50) + 5); 
   const navigate = useNavigate();
 
-  const { bookmarkedPosts, toggleBookmark, deletePost } = useContext(AppContext);
+  const { bookmarkedPosts, toggleBookmark, deletePost, followedUsers, toggleFollow } = useContext(AppContext);
   const { currentUser } = useContext(AuthContext);
 
   const isBookmarked = bookmarkedPosts.includes(post.id);
   const isOwnPost = currentUser?.id === post.userId;
+  const isFollowing = followedUsers.includes(post.userId);
 
   const handleLike = (e) => {
     e.stopPropagation();
@@ -68,10 +69,27 @@ const PostCard = ({ post }) => {
           <div className="avatar" onClick={handleUserClick} style={{cursor: 'pointer'}}>
             {post.user?.name?.charAt(0) || 'U'}
           </div>
-          <div className="user-info">
-            <span className="author-name" onClick={handleUserClick}>
+          <div className="user-info" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span className="author-name" onClick={handleUserClick} style={{ fontWeight: 600 }}>
               {post.user?.name || `User ${post.userId}`}
             </span>
+            {!isOwnPost && (
+              <span 
+                onClick={(e) => { e.stopPropagation(); toggleFollow(post.userId); }}
+                style={{
+                  fontSize: '0.75rem',
+                  padding: '2px 8px',
+                  borderRadius: '12px',
+                  background: isFollowing ? 'var(--bg-secondary)' : 'var(--accent-primary)',
+                  color: isFollowing ? 'var(--text-secondary)' : 'white',
+                  cursor: 'pointer',
+                  fontWeight: '600',
+                  border: isFollowing ? '1px solid var(--border-color)' : 'none'
+                }}
+              >
+                {isFollowing ? 'Following' : 'Follow'}
+              </span>
+            )}
           </div>
         </div>
 
