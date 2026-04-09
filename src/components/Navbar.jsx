@@ -13,8 +13,9 @@ const Navbar = () => {
   const [showModal, setShowModal] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   const [newBody, setNewBody] = useState('');
+  const [mediaUrl, setMediaUrl] = useState('');
+  const [mediaType, setMediaType] = useState('none');
 
-  // Apply theme
   useEffect(() => {
     if (theme === 'light') {
       document.documentElement.classList.add('light-theme');
@@ -36,12 +37,14 @@ const Navbar = () => {
   const handleCreatePost = (e) => {
     e.preventDefault();
     if(newTitle.trim() && newBody.trim()) {
-      createPost(newTitle, newBody);
+      createPost(newTitle, newBody, mediaUrl, mediaType);
       setNewTitle('');
       setNewBody('');
+      setMediaUrl('');
+      setMediaType('none');
       setShowModal(false);
       navigate('/');
-      window.scrollTo(0, 0); // Scroll to top to see new post
+      window.scrollTo(0, 0);
     }
   };
 
@@ -78,7 +81,6 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Very basic inline modal for creating a post */}
       {showModal && (
         <div style={{
           position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', 
@@ -105,6 +107,28 @@ const Navbar = () => {
                 style={{ paddingLeft: '1rem', minHeight: '100px', resize: 'vertical' }}
                 required
               />
+              <select 
+                value={mediaType} 
+                onChange={e => setMediaType(e.target.value)}
+                className="search-input"
+                style={{ paddingLeft: '1rem', cursor: 'pointer' }}
+              >
+                <option value="none">No Media Attachment</option>
+                <option value="image">Picture / Image URL</option>
+                <option value="audio">Song / Audio URL</option>
+                <option value="video">Video URL</option>
+              </select>
+              {mediaType !== 'none' && (
+                <input 
+                  type="url" 
+                  placeholder="Paste Media URL here" 
+                  value={mediaUrl} 
+                  onChange={e => setMediaUrl(e.target.value)}
+                  className="search-input"
+                  style={{ paddingLeft: '1rem' }}
+                  required
+                />
+              )}
               <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginTop: '1rem' }}>
                 <button type="button" onClick={() => setShowModal(false)} className="back-btn" style={{ background: 'transparent', color: 'var(--text-secondary)' }}>Cancel</button>
                 <button type="submit" className="back-btn" style={{ background: 'var(--accent-primary)', color: 'white', padding: '0.5rem 1.5rem', borderRadius: '8px' }}>Post</button>

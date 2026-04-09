@@ -9,7 +9,6 @@ import SavedPostsPage from './pages/SavedPostsPage';
 import { AuthContext } from './context/AuthContext';
 import './index.css';
 
-// Protected Route Wrapper
 const ProtectedRoute = ({ children }) => {
   const { currentUser } = React.useContext(AuthContext);
   if (!currentUser) return <Navigate to="/login" replace />;

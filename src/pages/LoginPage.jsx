@@ -9,9 +9,8 @@ const LoginPage = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedUserId, setSelectedUserId] = useState('');
-  const [activeTab, setActiveTab] = useState('login'); // 'login' or 'register'
+  const [activeTab, setActiveTab] = useState('login');
   
-  // Registration Form State
   const [regData, setRegData] = useState({
     name: '', username: '', email: '', phone: '', website: '', companyName: ''
   });
@@ -23,11 +22,9 @@ const LoginPage = () => {
     const loadUsers = async () => {
       try {
         const data = await fetchUsers();
-        // Merge API users with freshly created Local Users so they can log back into them later
         setUsers([...localUsers, ...data]);
       } catch (err) {
         console.error("Failed to fetch users for login.");
-        // If API fails, at least load local users
         setUsers(localUsers);
       } finally {
         setLoading(false);
@@ -49,7 +46,6 @@ const LoginPage = () => {
     e.preventDefault();
     if (!regData.name || !regData.username || !regData.email) return;
 
-    // Format matches JSONPlaceholder User Structure
     const newUser = {
       name: regData.name,
       username: regData.username,
@@ -109,12 +105,20 @@ const LoginPage = () => {
               <select 
                 value={selectedUserId} 
                 onChange={(e) => setSelectedUserId(e.target.value)}
-                style={{ padding: '0.8rem', borderRadius: '8px', background: 'rgba(0,0,0,0.2)', color: 'var(--text-primary)', border: '1px solid var(--card-border)' }}
+                style={{ 
+                  padding: '0.8rem', 
+                  borderRadius: '8px', 
+                  background: 'rgba(0, 0, 0, 0.4)', 
+                  color: 'var(--accent-primary)', 
+                  border: '1px solid rgba(88, 166, 255, 0.5)',
+                  fontWeight: '600',
+                  outline: 'none'
+                }}
                 required
               >
-                <option value="" disabled>-- Select a User --</option>
+                <option value="" disabled style={{ color: 'var(--text-secondary)' }}>-- Select a User --</option>
                 {users.map(user => (
-                  <option key={user.id} value={user.id}>
+                  <option key={user.id} value={user.id} style={{ background: '#161b22', color: '#f0f6fc' }}>
                     {user.name} (@{user.username}) {user.isLocal ? '[Local]' : ''}
                   </option>
                 ))}

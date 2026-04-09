@@ -52,11 +52,13 @@ export const AppProvider = ({ children }) => {
   };
 
   // Create
-  const createPost = (title, body) => {
+  const createPost = (title, body, mediaUrl = '', mediaType = 'none') => {
     const newPost = {
       id: `local-${Date.now()}`, // Temporary local ID
       title,
       body,
+      mediaUrl,
+      mediaType,
       userId: currentUser.id,
       user: currentUser, // attaching user model directly for frontend
     };

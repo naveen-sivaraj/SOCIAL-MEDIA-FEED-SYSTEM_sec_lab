@@ -40,9 +40,6 @@ const PostCard = ({ post }) => {
     const newTitle = prompt('Edit Title:', post.title);
     const newBody = prompt('Edit Body:', post.body);
     if(newTitle && newBody && newTitle.trim() && newBody.trim()) {
-      // Assuming editPost is in context, but for simplicity of this UI update we just trigger an event or use context
-      // Note: Full edit logic would ideally be a modal, using primitive prompts here for brevity
-      // We will leave the actual context edit call out of this tiny component update unless requested.
       alert('Post edit simulating... Full Edit Modal coming soon!');
     }
   };
@@ -104,6 +101,16 @@ const PostCard = ({ post }) => {
       <div className="post-content">
         <h3 className="post-title">{post.title}</h3>
         <p className="post-body">{post.body}</p>
+        
+        {post.mediaType === 'image' && post.mediaUrl && (
+          <img src={post.mediaUrl} alt="Post attachment" style={{ width: '100%', borderRadius: '12px', marginTop: '1rem', objectFit: 'cover', maxHeight: '400px' }} />
+        )}
+        {post.mediaType === 'audio' && post.mediaUrl && (
+          <audio controls src={post.mediaUrl} style={{ width: '100%', marginTop: '1rem', borderRadius: '30px' }} onClick={(e) => e.stopPropagation()} />
+        )}
+        {post.mediaType === 'video' && post.mediaUrl && (
+          <video controls src={post.mediaUrl} style={{ width: '100%', borderRadius: '12px', marginTop: '1rem' }} onClick={(e) => e.stopPropagation()} />
+        )}
       </div>
 
       <div className="action-bar" onClick={(e) => e.stopPropagation()} style={{ justifyContent: 'space-between' }}>
